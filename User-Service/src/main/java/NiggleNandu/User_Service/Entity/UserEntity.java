@@ -1,7 +1,6 @@
-package NiggleNandu.User_Service;
+package NiggleNandu.User_Service.Entity;
 
 import jakarta.persistence.*;
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 
 import java.util.ArrayList;
 import java.util.List;

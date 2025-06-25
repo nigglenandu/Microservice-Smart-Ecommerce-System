@@ -1,4 +1,4 @@
-package NiggleNandu.User_Service;
+package NiggleNandu.User_Service.Entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
