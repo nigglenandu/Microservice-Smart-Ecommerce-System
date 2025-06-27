@@ -7,7 +7,7 @@ import NiggleNandu.User_Service.Entity.WishlistItem;
 import java.util.Optional;
 
 public interface IUserService {
-    UserEntity getUserById(Long id);
+    Optional<UserEntity> getUserById(Long id);
     void addToWishlist(Long id, WishlistItem item);
     void addViewedProduct(Long id, RecentlyViewedProduct product);
 }

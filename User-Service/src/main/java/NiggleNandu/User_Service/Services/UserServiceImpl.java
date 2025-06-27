@@ -17,21 +17,22 @@ public class UserServiceImpl implements IUserService{
     private UserRepository userRepo;
 
     @Override
-    public UserEntity getUserById(Long id) {
-        return userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public Optional<UserEntity> getUserById(Long id) {
+        return userRepo.findById(id);
     }
 
     @Override
     public void addToWishlist(Long id, WishlistItem item) {
-        UserEntity user = getUserById(id);
+        UserEntity user = getUserById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
         user.getWishlist().add(item);
         userRepo.save(user);
     }
 
     @Override
     public void addViewedProduct(Long id, RecentlyViewedProduct product) {
-        UserEntity user = getUserById(id);
+        UserEntity user = getUserById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
         product.setViewedAt(LocalDateTime.now());
         user.getRecentlyViewed().add(product);
         userRepo.save(user);
