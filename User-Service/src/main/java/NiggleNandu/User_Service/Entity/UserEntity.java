@@ -88,11 +88,11 @@ public class UserEntity {
         this.username = username;
     }
 
-    public List<WishlistItem> getWishList() {
+    public List<WishlistItem> getWishlist() {
         return wishlist;
     }
 
-    public void setWishList(List<WishlistItem> wishList) {
+    public void setWishlist(List<WishlistItem> wishList) {
         this.wishlist = wishlist;
     }
 }
