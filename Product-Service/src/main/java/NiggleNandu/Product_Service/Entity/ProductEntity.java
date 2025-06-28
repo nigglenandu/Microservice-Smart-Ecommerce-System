@@ -1,9 +1,8 @@
 package NiggleNandu.Product_Service.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class ProductEntity {
@@ -17,13 +16,24 @@ public class ProductEntity {
     private String imageUrl;
     private boolean active;
 
-    public ProductEntity(boolean active, String description, Long id, String imageUrl, String name, Double price) {
-        this.active = active;
-        this.description = description;
-        this.id = id;
-        this.imageUrl = imageUrl;
-        this.name = name;
+    @ElementCollection
+    private List<ProductVariant> variants;
+
+    @ManyToOne
+    private Category category;
+
+    private int stock;
+
+    public ProductEntity(List<ProductVariant> variants, int stock, Double price, String name, String imageUrl, Long id, String description, Category category, boolean active) {
+        this.variants = variants;
+        this.stock = stock;
         this.price = price;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.id = id;
+        this.description = description;
+        this.category = category;
+        this.active = active;
     }
 
     public ProductEntity() {
@@ -75,5 +85,29 @@ public class ProductEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public List<ProductVariant> getVariants() {
+        return variants;
+    }
+
+    public void setVariants(List<ProductVariant> variants) {
+        this.variants = variants;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 }
