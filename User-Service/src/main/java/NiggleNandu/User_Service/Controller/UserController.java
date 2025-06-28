@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("{id}/orders")
-    @PreAuthorized("hasRole('CUSTOMER')")
+//    @PreAuthorized("hasRole('CUSTOMER')")
     public ResponseEntity<List<OrderDto>> getOrderHistory(@PathVariable Long id){
         return ResponseEntity.ok(orderClient.getUsersOrders(id));
     }
