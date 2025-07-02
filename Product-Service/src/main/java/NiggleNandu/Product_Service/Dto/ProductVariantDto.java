@@ -1,19 +1,10 @@
-package NiggleNandu.Product_Service.Entity;
+package NiggleNandu.Product_Service.Dto;
 
-import jakarta.persistence.Embeddable;
-
-@Embeddable
-public class ProductVariant {
+public class ProductVariantDto {
     private String size;
     private String color;
 
-    public ProductVariant(String color, String size) {
-        this.color = color;
-        this.size = size;
-    }
-
-    public ProductVariant() {
-    }
+    public ProductVariantDto() {}
 
     public String getColor() {
         return color;
