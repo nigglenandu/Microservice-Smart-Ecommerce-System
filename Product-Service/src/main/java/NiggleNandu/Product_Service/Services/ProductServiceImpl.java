@@ -5,6 +5,7 @@ import NiggleNandu.Product_Service.Dto.ProductVariantDto;
 import NiggleNandu.Product_Service.Entity.Category;
 import NiggleNandu.Product_Service.Entity.ProductEntity;
 import NiggleNandu.Product_Service.Entity.ProductVariant;
+import NiggleNandu.Product_Service.Repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceImpl implements ProductService{
     @Autowired
-    private ProductRepository productRepo;
-
+    private ProductRepo productRepo;
 
     @Override
     public ProductDto createProduct(ProductDto dto) {
@@ -25,10 +25,10 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ProductDto updateProduct(ProductDto dto) {
+    public ProductDto updateProduct(Long id, ProductDto dto) {
         ProductEntity product = productRepo.findById(id)
-                .orEleThrow(() -> new RuntimeException("Product not found"));
-        mpaDtoToEntity(dto, product);
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        mapDtoToEntity(dto, product);
         return mapEntityToDto(productRepo.save(product));
     }
 
@@ -88,7 +88,7 @@ public class ProductServiceImpl implements ProductService{
         List<ProductVariant>  variants = dto.getVariants().stream().map(v -> {
             ProductVariant variant = new ProductVariant();
             variant.setColor(v.getColor());
-            variant.getSize(v.getSize());
+            variant.setSize(v.getSize());
             return variant;
         }).collect(Collectors.toList());
         product.setVariants(variants);
