@@ -1,8 +1,12 @@
 package NiggleNandu.Product_Service.Controller;
 
+import NiggleNandu.Product_Service.Dto.ProductDto;
+import NiggleNandu.Product_Service.Services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
