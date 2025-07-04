@@ -1,11 +1,5 @@
 package NiggleNandu.Product_Service.Dto;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
