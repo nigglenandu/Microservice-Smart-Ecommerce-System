@@ -22,12 +22,18 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDto>> all() {
-        return ResponseEntity.ok(productService.getAllActive());
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProduct(id));
     }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<ProductDto>> getAllActiveProducts() {
+        return ResponseEntity.ok(productService.getAllActive());
+    }
+
 }

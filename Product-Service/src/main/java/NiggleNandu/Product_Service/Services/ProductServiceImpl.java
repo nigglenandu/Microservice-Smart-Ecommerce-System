@@ -5,6 +5,7 @@ import NiggleNandu.Product_Service.Dto.ProductVariantDto;
 import NiggleNandu.Product_Service.Entity.Category;
 import NiggleNandu.Product_Service.Entity.ProductEntity;
 import NiggleNandu.Product_Service.Entity.ProductVariant;
+import NiggleNandu.Product_Service.Repository.CategoryRepo;
 import NiggleNandu.Product_Service.Repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService{
     @Autowired
     private ProductRepo productRepo;
+
+    @Autowired
+    private CategoryRepo categoryRepo;
 
     @Override
     public ProductDto createProduct(ProductDto dto) {
@@ -51,6 +55,14 @@ public class ProductServiceImpl implements ProductService{
         productRepo.deleteById(id);
     }
 
+    @Override
+    public List<ProductDto> getAll() {
+        return productRepo.findAll().stream()
+                .map(this::mapEntityToDto)
+                .collect(Collectors.toList());
+
+    }
+
     private ProductDto mapEntityToDto(ProductEntity product){
         ProductDto dto = new ProductDto();
         dto.setId(product.getId());
@@ -71,7 +83,7 @@ public class ProductServiceImpl implements ProductService{
         return dto;
     }
 
-    private void mapDtoToEntity(ProductDto dto, ProductEntity product){
+    private void mapDtoToEntity(ProductDto dto, ProductEntity product) {
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
@@ -79,13 +91,13 @@ public class ProductServiceImpl implements ProductService{
         product.setActive(dto.isActive());
         product.setStock(dto.getStock());
 
-        if (dto.getCategoryId() != null){
+        if (dto.getCategoryId() != null) {
             Category category = categoryRepo.findById(dto.getCategoryId())
-                            .orElseThrow(() -> new RuntimeException("Category not found"));
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
             product.setCategory(category);
         }
 
-        List<ProductVariant>  variants = dto.getVariants().stream().map(v -> {
+        List<ProductVariant> variants = dto.getVariants().stream().map(v -> {
             ProductVariant variant = new ProductVariant();
             variant.setColor(v.getColor());
             variant.setSize(v.getSize());
@@ -93,4 +105,5 @@ public class ProductServiceImpl implements ProductService{
         }).collect(Collectors.toList());
         product.setVariants(variants);
     }
+
 }
