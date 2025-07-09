@@ -1,5 +1,7 @@
 package NiggleNandu.Cart_Service.Controller;
 
+import NiggleNandu.Cart_Service.Dto.CartDto;
+import NiggleNandu.Cart_Service.Dto.CartItemDto;
 import Services.ICartService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
