@@ -19,7 +19,7 @@ public class CartController {
 
     @PostMapping("/{userId}/add")
     public ResponseEntity<CartDto> addItem(@PathVariable String userId, @RequestBody CartItemDto itemDto){
-        return ResponseEntity.ok(cartservice.addCart(userId, itemDto));
+        return ResponseEntity.ok(cartservice.addToCart(userId, itemDto));
     }
 
     @DeleteMapping("/{userId}")
