@@ -5,6 +5,7 @@ import NiggleNandu.Cart_Service.Dto.CartDto;
 import NiggleNandu.Cart_Service.Dto.CartItemDto;
 import NiggleNandu.Cart_Service.Dto.CartRequest;
 import NiggleNandu.Cart_Service.Dto.ProductDto;
+import NiggleNandu.Cart_Service.Entity.CartEntity;
 import NiggleNandu.Cart_Service.Entity.CartItem;
 import NiggleNandu.Cart_Service.Repository.CartRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,9 @@ public class CartServiceImpl implements ICartService{
         if(!product.isActive()) throw new RuntimeException("Product is inactive");
         if(product.getStock() < request.getQuantity()) throw new RuntimeException("Insufficient stock");
 
-        Cart cart = cartRepo.findById(userId).orElse(new Cart(userId));
+        CartEntity cart = cartRepo.findById(userId).orElse(new CartEntity());
 
-        Optional<CartItem> existingItem = cart.getItems().stream
+        Optional<CartItem> existingItem = cart.getItems().stream()
                 .filter(item -> item.getProductId().equals(request.getProductId()) &&
                         item.getVariant().equals(request.getVariant()))
                 .findFirst();

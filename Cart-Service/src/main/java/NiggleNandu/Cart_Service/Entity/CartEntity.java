@@ -28,6 +28,7 @@ public class CartEntity {
     }
 
     public CartEntity() {
+
     }
 
     public Double getDiscount() {
