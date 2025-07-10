@@ -2,6 +2,7 @@ package NiggleNandu.Cart_Service.Controller;
 
 import NiggleNandu.Cart_Service.Dto.CartDto;
 import NiggleNandu.Cart_Service.Dto.CartItemDto;
+import NiggleNandu.Cart_Service.Dto.CartRequest;
 import Services.ICartService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class CartController {
     }
 
     @PostMapping("/{userId}/add")
-    public ResponseEntity<CartDto> addItem(@PathVariable String userId, @RequestBody CartItemDto itemDto){
-        return ResponseEntity.ok(cartservice.addToCart(userId, itemDto));
+    public ResponseEntity<CartDto> addItem(@PathVariable String userId, @RequestBody CartRequest request){
+        return ResponseEntity.ok(cartservice.addToCart(userId, request));
     }
 
     @DeleteMapping("/{userId}")

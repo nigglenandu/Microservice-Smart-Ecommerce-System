@@ -1,11 +1,6 @@
 package NiggleNandu.Cart_Service.Dto;
 
-import NiggleNandu.Cart_Service.Entity.CartItem;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CartDto {
