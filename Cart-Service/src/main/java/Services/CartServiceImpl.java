@@ -63,6 +63,13 @@ public class CartServiceImpl implements ICartService{
 
     @Override
     public void clearCart(String userId) {
-
+        CartEntity cart = cartRepo.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
+        cart.getItems().clear();
+        cart.setTotal(0.0);
+        cart.setDiscount(0.0);
+        cart.setLastUpdated(LocalDateTime.now());
+        cartRepo.save(cart);
     }
+
 }
