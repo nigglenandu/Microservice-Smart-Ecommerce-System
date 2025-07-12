@@ -1,10 +1,7 @@
 package Services;
 
 import NiggleNandu.Cart_Service.Clients.ProductClient;
-import NiggleNandu.Cart_Service.Dto.CartDto;
-import NiggleNandu.Cart_Service.Dto.CartItemDto;
-import NiggleNandu.Cart_Service.Dto.CartRequest;
-import NiggleNandu.Cart_Service.Dto.ProductDto;
+import NiggleNandu.Cart_Service.Dto.*;
 import NiggleNandu.Cart_Service.Entity.CartEntity;
 import NiggleNandu.Cart_Service.Entity.CartItem;
 import NiggleNandu.Cart_Service.Repository.CartRepo;
@@ -12,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CartServiceImpl implements ICartService{
@@ -57,8 +56,23 @@ public class CartServiceImpl implements ICartService{
     }
 
     @Override
-    public CartDto getCart(String userId) {
-        return null;
+    public CartResponse getCart(String userId) {
+        CartEntity cart = cartRepo.findById(userId).orElse(new CartEntity(userId));
+
+        List<CartItemDto> items = cart.getItems().stream().map(item -> {
+            CartItemDto dto = new CartItemDto();
+            dto.setProductId(item.getProductId());
+            dto.setVariant(item.getVariant());
+            dto.setQuantity(item.getQuantity());
+            dto.setPrice(item.getPrice());
+            return dto;
+        }).collect(Collectors.toList());
+
+        CartResponse response = new CartResponse();
+        response.setCartItemList(items);
+        response.setTotal(cart.getDiscount());
+        response.setDiscount(cart.getDiscount());
+        return response;
     }
 
     @Override

@@ -2,9 +2,10 @@ package Services;
 
 import NiggleNandu.Cart_Service.Dto.CartDto;
 import NiggleNandu.Cart_Service.Dto.CartRequest;
+import NiggleNandu.Cart_Service.Dto.CartResponse;
 
 public interface ICartService {
     CartDto addToCart(String userId, CartRequest request);
-    CartDto getCart(String userId);
+    CartResponse getCart(String userId);
     void clearCart(String userId);
 }
