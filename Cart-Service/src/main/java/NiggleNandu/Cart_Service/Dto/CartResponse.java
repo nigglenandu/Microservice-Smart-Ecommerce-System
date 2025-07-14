@@ -9,6 +9,8 @@ public class CartResponse {
     private double total;
     private double discount;
 
+
+
     public List<CartItemDto> getCartItemList() {
         return cartItemList;
     }

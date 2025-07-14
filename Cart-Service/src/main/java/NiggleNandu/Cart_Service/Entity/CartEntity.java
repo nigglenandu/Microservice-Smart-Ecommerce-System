@@ -19,6 +19,14 @@ public class CartEntity {
     private Double discount;
     private LocalDateTime lastUpdated;
 
+    public CartEntity(String userId) {
+        this.userId = userId;
+        this.items = new ArrayList<>();
+        this.total = 0.0;
+        this.discount = 0.0;
+        this.lastUpdated = LocalDateTime.now();
+    }
+
     public CartEntity(Double discount, List<CartItem> items, LocalDateTime lastUpdated, Double total, String userId) {
         this.discount = discount;
         this.items = items;
