@@ -5,15 +5,15 @@ import NiggleNandu.Cart_Service.Entity.CartItem;
 import java.util.List;
 
 public class CartResponse {
-    private List<CartItem> cartItemList;
+    private List<CartItemDto> cartItemList;
     private double total;
     private double discount;
 
-    public List<CartItem> getCartItemList() {
+    public List<CartItemDto> getCartItemList() {
         return cartItemList;
     }
 
-    public void setCartItemList(List<CartItem> cartItemList) {
+    public void setCartItemList(List<CartItemDto> cartItemList) {
         this.cartItemList = cartItemList;
     }
 
@@ -32,4 +32,5 @@ public class CartResponse {
     public void setDiscount(double discount) {
         this.discount = discount;
     }
+
 }
