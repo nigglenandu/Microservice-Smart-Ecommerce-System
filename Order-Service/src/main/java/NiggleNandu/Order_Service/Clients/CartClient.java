@@ -1,5 +1,6 @@
 package NiggleNandu.Order_Service.Clients;
 
+import NiggleNandu.Order_Service.Dtos.CartDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
