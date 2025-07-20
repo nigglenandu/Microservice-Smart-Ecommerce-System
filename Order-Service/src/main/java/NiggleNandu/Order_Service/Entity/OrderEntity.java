@@ -26,11 +26,12 @@ public class OrderEntity {
 
     private String shippingAddress;
 
-    public OrderEntity(double discount, Long id, List<OrderItem> item, LocalDateTime orderDate, String shippingAddress, OrderStatus status, double total, String userId) {
+    public OrderEntity(double discount, Long id, List<OrderItem> item, LocalDateTime orderDate, PaymentStatus paymentStatus, String shippingAddress, OrderStatus status, double total, String userId) {
         this.discount = discount;
         this.id = id;
         this.item = item;
         this.orderDate = orderDate;
+        this.paymentStatus = paymentStatus;
         this.shippingAddress = shippingAddress;
         this.status = status;
         this.total = total;
@@ -102,5 +103,13 @@ public class OrderEntity {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 }
