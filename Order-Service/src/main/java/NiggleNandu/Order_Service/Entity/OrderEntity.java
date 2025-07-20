@@ -12,6 +12,11 @@ public class OrderEntity {
     private Long id;
     private String userId;
     private LocalDateTime orderDate;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
+
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
     private double total;
     private double discount;
