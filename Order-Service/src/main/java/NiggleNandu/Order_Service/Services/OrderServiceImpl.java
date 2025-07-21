@@ -58,7 +58,10 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public List<OrderDto> getOrdersByUser(String userId) {
-        return List.of();
+        return orderRepo.findByUserId(userId)
+                .stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
     private OrderDto mapToDto(OrderEntity order){
