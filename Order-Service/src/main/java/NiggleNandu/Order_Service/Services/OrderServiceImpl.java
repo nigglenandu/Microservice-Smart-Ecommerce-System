@@ -72,17 +72,17 @@ public class OrderServiceImpl implements OrderService{
         dto.setStatus(order.getStatus());
         dto.setPaymentStatus(order.getPaymentStatus().toString());
 
-        List<OrderItemDto> itemDtos = order.getItems().stream.map(item -> {
+        List<OrderItemDto> itemDtos = order.getItem().stream().map(item -> {
             OrderItemDto i = new OrderItemDto();
             i.setProductId(item.getProductId());
             i.setQuantity(item.getQuantity());
             i.setSize(item.getSize());
             i.setColor(item.getColor());
-            i.setPrice(item.getprice());
+            i.setPrice(item.getPrice());
             return i;
         }).collect(Collectors.toList());
 
-        dto.setItems(itemsDtos);
+        dto.setItems(itemDtos);
         return dto;
     }
 }

@@ -2,6 +2,7 @@ package NiggleNandu.Order_Service.Entity;
 
 import jakarta.persistence.*;
 
+import java.nio.channels.FileChannel;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -112,4 +113,5 @@ public class OrderEntity {
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
+
 }
