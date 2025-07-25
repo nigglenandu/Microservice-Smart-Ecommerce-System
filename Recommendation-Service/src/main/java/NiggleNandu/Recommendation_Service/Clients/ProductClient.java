@@ -1,5 +1,6 @@
 package NiggleNandu.Recommendation_Service.Clients;
 
+import NiggleNandu.Recommendation_Service.Dtos.ProductDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
