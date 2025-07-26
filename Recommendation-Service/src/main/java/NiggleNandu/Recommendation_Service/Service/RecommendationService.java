@@ -37,4 +37,13 @@ public class RecommendationService {
                 .map(this::mapToRecommendation)
                 .collect(Collectors.toList());
     }
+
+    public List<RecommedationDto> getTrendingProducts(){
+        List<Long> trendingIds = List.of(1L, 2L, 3L);
+
+        return trendingIds.stream()
+                .map(productClient::getProduct)
+                .map(this::mapToRecommendation)
+                .collect(Collectors.toList());
+    }
 }
