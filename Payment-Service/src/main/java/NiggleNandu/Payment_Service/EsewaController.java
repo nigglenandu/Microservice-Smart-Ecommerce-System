@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
 @RestController
@@ -58,6 +60,28 @@ public class EsewaController {
         } catch (Exception e){
             logger.error("Failed to process verification request for transaction_uuid={}: {}", transactionUuid, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid data format: " + e.getClass());
+        }
+    }
+
+    private boolean verifySignature(JsonNode jsonNode, String signedFieldNames, String receivedSignature){
+        try{
+            String[] fields = signedFieldNames.split(",");
+            StringBuilder data = new StringBuilder();
+            for(String field : fields){
+                data.append(field).append("=").append(jsonNode.path(field).asText()).append(",");
+            }
+            data.setLength(data.length() - 1);
+
+            Mac mac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKeySpec = new SecretKeySpec("8gBm/:&EnhH.1/q".getBytes("UTF-8"), "HmacSHA256");
+            mac.init(secretKeySpec);
+            byte[] hash = mac.doFinal(data.toString().getBytes("UTF-8"));
+            String calculatedSignature = Base64.getEncoder().encodeToString(hash);
+
+            return calculatedSignature.equals(receivedSignature);
+        } catch (Exception e){
+            logger.error("signature verfication failed: {}", e.getMessage());
+            return false;
         }
     }
 }
