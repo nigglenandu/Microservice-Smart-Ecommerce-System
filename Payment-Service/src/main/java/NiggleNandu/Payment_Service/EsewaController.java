@@ -80,8 +80,20 @@ public class EsewaController {
 
             return calculatedSignature.equals(receivedSignature);
         } catch (Exception e){
-            logger.error("signature verfication failed: {}", e.getMessage());
+            logger.error("signature verification failed: {}", e.getMessage());
             return false;
         }
+    }
+
+    @GetMapping("/failure")
+    public ResponseEntity<String> handlePaymentFailure(){
+        logger.info("Payment failed, redirecting to failure endpoint");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment failed");
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e){
+        logger.warn("Validation error: {}", e.getMessage());
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }
