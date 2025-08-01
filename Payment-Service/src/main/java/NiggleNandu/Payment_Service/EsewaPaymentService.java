@@ -52,5 +52,31 @@ public class EsewaPaymentService {
             response.setFormField(formFields);
             return response;
         }
+
+        validatePaymentRequest(request);
+        String transactionUuid = UUID.randomUUID().toString();
+        double totalAmount = calculateTotalAmount(request);
+
+        Map<String, String> formFields = new HashMap<>();
+        formFields.put("amount", String.format("%.2f", request.getAmount()));
+        formFields.put("tax_amount", String.format("%.2f", request.getTaxAmount()));
+        formFields.put("product_service_charge", String.format("%.2f", request.getServiceCharge()));
+        formFields.put("product_delivery_charge", String.format("%.2f", request.getDeliveryCharge()));
+        formFields.put("total_amount", String.format("%.2f", totalAmount));
+        formFields.put("transaction_uuid", transactionUuid);
+        formFields.put("product_code", merchantId);
+        formFields.put("success_url", successUrl + "?transaction_uuid=" + transactionUuid);
+        formFields.put("failure_url", failureUrl);
+        formFields.put("signed_field_names", "total_Amount, transaction_uuid, product_code");
+
+        String signatureData = buildSignatureData(totalAmount, transactionUuid);
+        String signature = generateSignature(signatureData, "8gBm/:&EnhH.1/q");
+        formFields.put("signature", signature);
+
+        PaymentFormFieldResponse response = new PaymentFormFieldResponse();
+        response.setEsewaUrl(esewaUrl);
+        response.setFormField(formFields);
+
+        return response;
     }
 }
