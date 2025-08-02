@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -90,5 +93,27 @@ public class EsewaPaymentService {
         }
     }
 
+    private double calculateTotalAmount(PaymentRequest request){
+        return request.getAmount() + request.getTaxAmount() +
+                request.getServiceCharge() + request.getDeliveryCharge();
+    }
 
+    private String buildSignatureData(double totalAmount, String transactionUuid){
+        return "total_amount=" + String.format("%.2f", totalAmount) +
+                ",transaction_uuid=" + transactionUuid +
+                ",product_code=" + merchantId;
+    }
+
+    private String generateSignature(String data, String secretKey){
+        try{
+            Mac mac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
+            mac.init(secretKeySpec);
+            byte[] hash = mac.doFinal(data.getBytes("UTF-8"));
+            return Base64.getEncoder().encodeToString(hash);
+        } catch (Exception e){
+            logger.error("Failed to generate signature for data+'{}' : {}", data, e.getMessage());
+            throw new RuntimeException("Signature generation failed: " + e.getMessage(), e);
+        }
+    }
 }
