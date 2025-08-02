@@ -79,4 +79,16 @@ public class EsewaPaymentService {
 
         return response;
     }
+
+    private void validatePaymentRequest(PaymentRequest request){
+        if(request.getAmount() < 0 || request.getTaxAmount() < 0 ||
+        request.getServiceCharge() < 0 || request.getDeliveryCharge() < 0){
+            throw new IllegalArgumentException("All payment amounts must be not-negative");
+        }
+        if(!merchantId.equals(request.getProductCode())){
+            throw new IllegalArgumentException("Product code must match merchant ID: " + merchantId);
+        }
+    }
+
+
 }
