@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import javax.crypto.Mac;
@@ -83,37 +84,68 @@ public class EsewaPaymentService {
         return response;
     }
 
-    private void validatePaymentRequest(PaymentRequest request){
-        if(request.getAmount() < 0 || request.getTaxAmount() < 0 ||
-        request.getServiceCharge() < 0 || request.getDeliveryCharge() < 0){
+    private void validatePaymentRequest(PaymentRequest request) {
+        if (request.getAmount() < 0 || request.getTaxAmount() < 0 ||
+                request.getServiceCharge() < 0 || request.getDeliveryCharge() < 0) {
             throw new IllegalArgumentException("All payment amounts must be not-negative");
         }
-        if(!merchantId.equals(request.getProductCode())){
+        if (!merchantId.equals(request.getProductCode())) {
             throw new IllegalArgumentException("Product code must match merchant ID: " + merchantId);
         }
     }
 
-    private double calculateTotalAmount(PaymentRequest request){
+    private double calculateTotalAmount(PaymentRequest request) {
         return request.getAmount() + request.getTaxAmount() +
                 request.getServiceCharge() + request.getDeliveryCharge();
     }
 
-    private String buildSignatureData(double totalAmount, String transactionUuid){
+    private String buildSignatureData(double totalAmount, String transactionUuid) {
         return "total_amount=" + String.format("%.2f", totalAmount) +
                 ",transaction_uuid=" + transactionUuid +
                 ",product_code=" + merchantId;
     }
 
-    private String generateSignature(String data, String secretKey){
-        try{
+    private String generateSignature(String data, String secretKey) {
+        try {
             Mac mac = Mac.getInstance("HmacSHA256");
             SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
             mac.init(secretKeySpec);
             byte[] hash = mac.doFinal(data.getBytes("UTF-8"));
             return Base64.getEncoder().encodeToString(hash);
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.error("Failed to generate signature for data+'{}' : {}", data, e.getMessage());
             throw new RuntimeException("Signature generation failed: " + e.getMessage(), e);
+        }
+    }
+
+    public boolean verifyPayment(String transactionUuid, String refId, double totalAmount) {
+        String verficationUrl = String.format(
+                "https://rc-epay.esewa.com.np/api/epay/transaction/status?product_code=%s&total_amount=%.2f&transaction_uuid=%s",
+                merchantId, totalAmount, transactionUuid
+        );
+
+        int maxRetries = 3;
+        for (int i = 0; i < maxRetries; i++) {
+            try {
+                logger.info("Verifying merchant (attempt {}): transaction-uuid, refId={}", i + 1, transactionUuid, refId);
+                ResponseEntity<String> response = restTemplate.getForEntity(verficationUrl, String.class);
+                Map<String, String> responseMap = objectMapper.readValue(response.getBody(), Map.class);
+                boolean isVerified = "SUCCESS".equals(responseMap.get("status"));
+                logger.info("Payment verification result: transaction_uuid={}, verified={}", transactionUuid, isVerfied);
+                return isVerified;
+            } catch (Exception e) {
+                logger.warn("Verification attempt {} failed for transaction_uuid={}: {}", i + 1, transactionUuid, e.getMessage());
+                if (i == maxRetries - 1) {
+                    logger.error("All verification attempts failed for transaction_uuid={}: {}", transactionUuid, e.getMessage());
+                    return false;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ie) {
+
+                }
+            }
+            return false;
         }
     }
 }
