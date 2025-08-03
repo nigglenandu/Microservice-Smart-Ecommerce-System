@@ -119,7 +119,7 @@ public class EsewaPaymentService {
     }
 
     public boolean verifyPayment(String transactionUuid, String refId, double totalAmount) {
-        String verficationUrl = String.format(
+        String verificationUrl = String.format(
                 "https://rc-epay.esewa.com.np/api/epay/transaction/status?product_code=%s&total_amount=%.2f&transaction_uuid=%s",
                 merchantId, totalAmount, transactionUuid
         );
@@ -127,11 +127,11 @@ public class EsewaPaymentService {
         int maxRetries = 3;
         for (int i = 0; i < maxRetries; i++) {
             try {
-                logger.info("Verifying merchant (attempt {}): transaction-uuid, refId={}", i + 1, transactionUuid, refId);
-                ResponseEntity<String> response = restTemplate.getForEntity(verficationUrl, String.class);
+                logger.info("Verifying payment (attempt {}): transaction_uuid={}, refId={}", i + 1, transactionUuid, refId);
+                ResponseEntity<String> response = restTemplate.getForEntity(verificationUrl, String.class);
                 Map<String, String> responseMap = objectMapper.readValue(response.getBody(), Map.class);
                 boolean isVerified = "SUCCESS".equals(responseMap.get("status"));
-                logger.info("Payment verification result: transaction_uuid={}, verified={}", transactionUuid, isVerfied);
+                logger.info("Payment verification result: transaction_uuid={}, verified={}", transactionUuid, isVerified);
                 return isVerified;
             } catch (Exception e) {
                 logger.warn("Verification attempt {} failed for transaction_uuid={}: {}", i + 1, transactionUuid, e.getMessage());
@@ -139,13 +139,9 @@ public class EsewaPaymentService {
                     logger.error("All verification attempts failed for transaction_uuid={}: {}", transactionUuid, e.getMessage());
                     return false;
                 }
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ie) {
-
-                }
+                try { Thread.sleep(1000); } catch (InterruptedException ie) {}
             }
-            return false;
         }
+        return false;
     }
 }
