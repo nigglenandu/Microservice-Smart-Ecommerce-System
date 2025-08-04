@@ -17,10 +17,10 @@ import java.util.UUID;
 public class EsewaPaymentService {
     private static final Logger logger = LoggerFactory.getLogger(EsewaPaymentService.class);
 
-    @Value("{esewa.test.url}")
+    @Value("${esewa.test.url}")
     private String esewaUrl;
 
-    @Value("{esewa.merchant.id}")
+    @Value("${esewa.merchant.id}")
     private String merchantId;
 
     @Value("${esewa.success.url}")
@@ -38,24 +38,7 @@ public class EsewaPaymentService {
     }
 
     public PaymentFormFieldResponse initiatePayment(PaymentRequest request) {
-        if ("true".equals(System.getenv("Mock_ESEWA"))) {
-            logger.info("Using mock mode for payment initiation");
-            String transactionUuid = UUID.randomUUID().toString();
-            double totalAmount = calculateTotalAmount(request);
-            Map<String, String> formFields = new HashMap<>();
-            formFields.put("amount", String.format("%.2f", request.getAmount()));
-            formFields.put("tax_amount", String.format("%.2f", request.getTaxAmount()));
-            formFields.put("product_service_charge", String.format("%.2f", request.getServiceCharge()));
-            formFields.put("product_delivery_charge", String.format("%.2f", request.getDeliveryCharge()));
-            formFields.put("transaction_uuid", transactionUuid);
-            formFields.put("product_code", merchantId);
-            formFields.put("success_url", successUrl + "?transaction_uuid=" + transactionUuid);
-            formFields.put("failure_url", failureUrl);
-            PaymentFormFieldResponse response = new PaymentFormFieldResponse();
-            response.setEsewaUrl("hhtps://mock-esewa.com");
-            response.setFormField(formFields);
-            return response;
-        }
+        logger.info("Initiating payment for orderId={}, amount={}", request.getOrderId(), request.getAmount());
 
         validatePaymentRequest(request);
         String transactionUuid = UUID.randomUUID().toString();
@@ -69,14 +52,19 @@ public class EsewaPaymentService {
         formFields.put("total_amount", String.format("%.2f", totalAmount));
         formFields.put("transaction_uuid", transactionUuid);
         formFields.put("product_code", merchantId);
-        formFields.put("success_url", successUrl + "?transaction_uuid=" + transactionUuid);
-        formFields.put("failure_url", failureUrl);
-        formFields.put("signed_field_names", "total_Amount, transaction_uuid, product_code");
 
+        // Include orderId in URLs and fields
+        formFields.put("order_id", String.valueOf(request.getOrderId()));
+        formFields.put("success_url", successUrl + "?transaction_uuid=" + transactionUuid + "&order_id=" + request.getOrderId());
+        formFields.put("failure_url", failureUrl + "?order_id=" + request.getOrderId());
+
+        // Signed fields and signature
+        formFields.put("signed_field_names", "total_amount,transaction_uuid,product_code");
         String signatureData = buildSignatureData(totalAmount, transactionUuid);
         String signature = generateSignature(signatureData, "8gBm/:&EnhH.1/q");
         formFields.put("signature", signature);
 
+        // Build response
         PaymentFormFieldResponse response = new PaymentFormFieldResponse();
         response.setEsewaUrl(esewaUrl);
         response.setFormField(formFields);
