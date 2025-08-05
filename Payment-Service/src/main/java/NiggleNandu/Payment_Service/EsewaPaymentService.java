@@ -52,19 +52,13 @@ public class EsewaPaymentService {
         formFields.put("total_amount", String.format("%.2f", totalAmount));
         formFields.put("transaction_uuid", transactionUuid);
         formFields.put("product_code", merchantId);
-
-        // Include orderId in URLs and fields
         formFields.put("order_id", String.valueOf(request.getOrderId()));
         formFields.put("success_url", successUrl + "?transaction_uuid=" + transactionUuid + "&order_id=" + request.getOrderId());
         formFields.put("failure_url", failureUrl + "?order_id=" + request.getOrderId());
-
-        // Signed fields and signature
         formFields.put("signed_field_names", "total_amount,transaction_uuid,product_code");
         String signatureData = buildSignatureData(totalAmount, transactionUuid);
         String signature = generateSignature(signatureData, "8gBm/:&EnhH.1/q");
         formFields.put("signature", signature);
-
-        // Build response
         PaymentFormFieldResponse response = new PaymentFormFieldResponse();
         response.setEsewaUrl(esewaUrl);
         response.setFormField(formFields);

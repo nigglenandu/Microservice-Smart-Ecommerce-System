@@ -25,7 +25,7 @@ public class EsewaController {
     private final ObjectMapper objectMapper;
 
     public EsewaController(ObjectMapper objectMapper, EsewaPaymentService paymentService){
-        this.objectMapper = objectmapper;
+        this.objectMapper = objectMapper;
         this.paymentService = paymentService;
     }
 
@@ -50,17 +50,17 @@ public class EsewaController {
             String signedFieldNames = jsonNode.path("sign_Field_names").asText();
             String signature = jsonNode.path("signature").asText();
             if(!verifySignature(jsonNode, signedFieldNames, signature)){
-                logger.warn("Signature verification failed for transaction_uui={}", transactionUuid);
+                logger.warn("Signature verification failed for transaction_uuid={}", transactionUuid);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Signature");
             }
 
             boolean verified = paymentService.verifyPayment(transactionUuid, refId, totalAmount);
             String responseMessage = verified ? "Payment Verified" : "Payment Verification failed";
-            logger.info("verification result for transaction_uuid{}: {}", transactionUuid, responseMessage);
+            logger.info("Verification result for transaction_uuid={}: {}", transactionUuid, responseMessage);
             return ResponseEntity.ok(responseMessage);
         } catch (Exception e){
             logger.error("Failed to process verification request for transaction_uuid={}: {}", transactionUuid, e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid data format: " + e.getClass());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid data format: " + e.getMessage());
         }
     }
 
