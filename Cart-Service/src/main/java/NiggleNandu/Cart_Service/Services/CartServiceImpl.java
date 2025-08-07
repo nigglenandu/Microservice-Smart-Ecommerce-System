@@ -1,4 +1,4 @@
-package Services;
+package NiggleNandu.Cart_Service.Services;
 
 import NiggleNandu.Cart_Service.Clients.ProductClient;
 import NiggleNandu.Cart_Service.Dto.*;
@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class CartServiceImpl implements ICartService{
+
     @Autowired
     private ProductClient productClient;
     @Autowired
@@ -52,7 +53,7 @@ public class CartServiceImpl implements ICartService{
         cart.setLastUpdated(LocalDateTime.now());
 
         cartRepo.save(cart);
-        return null;
+        return convertToDto(cart);
     }
 
     @Override
@@ -70,7 +71,7 @@ public class CartServiceImpl implements ICartService{
 
         CartResponse response = new CartResponse();
         response.setCartItemList(items);
-        response.setTotal(cart.getDiscount());
+        response.setTotal(cart.getTotal());
         response.setDiscount(cart.getDiscount());
         return response;
     }
@@ -84,6 +85,26 @@ public class CartServiceImpl implements ICartService{
         cart.setDiscount(0.0);
         cart.setLastUpdated(LocalDateTime.now());
         cartRepo.save(cart);
+    }
+
+    private CartDto convertToDto(CartEntity cart) {
+        CartDto dto = new CartDto();
+        dto.setUserId(cart.getUserId());
+        dto.setTotal(cart.getTotal());
+        dto.setDiscount(cart.getDiscount());
+        dto.setLastUpdated(cart.getLastUpdated());
+
+        List<CartItemDto> itemDtos = cart.getItems().stream().map(item -> {
+            CartItemDto itemDto = new CartItemDto();
+            itemDto.setProductId(item.getProductId());
+            itemDto.setVariant(item.getVariant());
+            itemDto.setQuantity(item.getQuantity());
+            itemDto.setPrice(item.getPrice());
+            return itemDto;
+        }).collect(Collectors.toList());
+
+        dto.setItems(itemDtos);
+        return dto;
     }
 
 }

@@ -9,7 +9,6 @@ import java.util.List;
 @Entity
 public class CartEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String userId; // or sessionId for guest
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
