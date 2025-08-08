@@ -1,8 +1,6 @@
 package NiggleNandu.Order_Service.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class OrderItem {
@@ -17,14 +15,19 @@ public class OrderItem {
     private int quantity;
     private double price;
 
-    public OrderItem(String color, Long id, String name, double price, Long productId, int quantity, String size) {
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private OrderEntity order;
+
+    public OrderItem(String color, String size, int quantity, Long productId, double price, OrderEntity order, String name, Long id) {
         this.color = color;
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.productId = productId;
-        this.quantity = quantity;
         this.size = size;
+        this.quantity = quantity;
+        this.productId = productId;
+        this.price = price;
+        this.order = order;
+        this.name = name;
+        this.id = id;
     }
 
     public OrderItem() {
@@ -84,5 +87,13 @@ public class OrderItem {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    public OrderEntity getOrder() {
+        return order;
+    }
+
+    public void setOrder(OrderEntity order) {
+        this.order = order;
     }
 }

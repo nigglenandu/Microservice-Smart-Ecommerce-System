@@ -22,7 +22,7 @@ public class OrderEntity {
     private double total;
     private double discount;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> item;
 
     private String shippingAddress;
