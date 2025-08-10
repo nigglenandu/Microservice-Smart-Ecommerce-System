@@ -4,6 +4,7 @@ import NiggleNandu.Product_Service.Dto.ProductDto;
 import NiggleNandu.Product_Service.Services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,8 +13,12 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('VENDOR')")
