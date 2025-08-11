@@ -92,7 +92,8 @@ public class UserEntity {
         return wishlist;
     }
 
-    public void setWishlist(List<WishlistItem> wishList) {
+    public void setWishlist(List<WishlistItem> wishlist) {
         this.wishlist = wishlist;
     }
+
 }

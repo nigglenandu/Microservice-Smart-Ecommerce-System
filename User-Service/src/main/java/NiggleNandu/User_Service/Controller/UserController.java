@@ -6,7 +6,6 @@ import NiggleNandu.User_Service.Entity.RecentlyViewedProduct;
 import NiggleNandu.User_Service.Entity.UserEntity;
 import NiggleNandu.User_Service.Entity.WishlistItem;
 import NiggleNandu.User_Service.Services.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +14,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    @Autowired
-    private IUserService userService;
 
-    @Autowired
-    private OrderClient orderClient;
+    private final IUserService userService;
+    private final OrderClient orderClient;
+
+    public UserController(IUserService userService, OrderClient orderClient) {
+        this.userService = userService;
+        this.orderClient = orderClient;
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserEntity> getUserById(@PathVariable Long id){
@@ -29,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping("{id}/orders")
-//    @PreAuthorized("hasRole('CUSTOMER')")
+//    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<OrderDto>> getOrderHistory(@PathVariable Long id){
         return ResponseEntity.ok(orderClient.getUsersOrders(id));
     }
