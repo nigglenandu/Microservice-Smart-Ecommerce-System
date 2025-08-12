@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CartRepo extends JpaRepository<CartEntity, Long> {
+public interface CartRepo extends JpaRepository<CartEntity, String> {
     Optional<CartEntity> findById(String userId);
 }
