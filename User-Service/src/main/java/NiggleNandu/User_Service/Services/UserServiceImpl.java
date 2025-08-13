@@ -22,6 +22,11 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
+    public UserEntity createUser(UserEntity user) {
+        return userRepo.save(user);
+    }
+
+    @Override
     public void addToWishlist(Long id, WishlistItem item) {
         UserEntity user = getUserById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
