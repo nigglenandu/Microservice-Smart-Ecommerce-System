@@ -28,7 +28,9 @@ public class CartServiceImpl implements ICartService{
         if(!product.isActive()) throw new RuntimeException("Product is inactive");
         if(product.getStock() < request.getQuantity()) throw new RuntimeException("Insufficient stock");
 
-        CartEntity cart = cartRepo.findById(userId).orElse(new CartEntity());
+        CartEntity cart = cartRepo.findById(userId)
+                .orElseGet(() -> new CartEntity(userId));
+
 
         Optional<CartItem> existingItem = cart.getItems().stream()
                 .filter(item -> item.getProductId().equals(request.getProductId()) &&

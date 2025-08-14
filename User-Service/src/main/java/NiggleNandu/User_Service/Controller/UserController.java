@@ -30,6 +30,12 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity user) {
+        return ResponseEntity.ok(userService.createUser(user));
+    }
+
+
     @GetMapping("{id}/orders")
 //    @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<List<OrderDto>> getOrderHistory(@PathVariable Long id){
