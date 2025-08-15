@@ -3,11 +3,20 @@ package NiggleNandu.Order_Service.Dtos;
 public class CartItemDto {
     private Long id;
     private Long productId;
+    private String productName;
     private String variant;
     private int quantity;
     private double price;
     private String size;
     private String color;
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
 
     public String getColor() {
         return color;

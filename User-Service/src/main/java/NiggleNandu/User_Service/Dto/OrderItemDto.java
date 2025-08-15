@@ -1,4 +1,4 @@
-package NiggleNandu.Recommendation_Service.Dtos;
+package NiggleNandu.User_Service.Dto;
 
 public class OrderItemDto {
     private Long id;

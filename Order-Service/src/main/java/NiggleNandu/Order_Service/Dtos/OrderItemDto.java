@@ -4,7 +4,8 @@ public class OrderItemDto {
     private Long id;
 
     private Long productId;
-    private String name;
+    private String productName;
+    private String variant;
     private String size;
     private String color;
     private int quantity;
@@ -42,12 +43,20 @@ public class OrderItemDto {
         this.productId = productId;
     }
 
-    public String getName() {
-        return name;
+    public String getVariant() {
+        return variant;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setVariant(String variant) {
+        this.variant = variant;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public Long getId() {
@@ -65,4 +74,5 @@ public class OrderItemDto {
     public void setPrice(double price) {
         this.price = price;
     }
+
 }

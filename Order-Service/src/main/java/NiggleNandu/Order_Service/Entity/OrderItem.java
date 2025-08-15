@@ -9,7 +9,8 @@ public class OrderItem {
     private Long id;
 
     private Long productId;
-    private String name;
+    private String productName;
+    private String variant;
     private String size;
     private String color;
     private int quantity;
@@ -19,15 +20,32 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private OrderEntity order;
 
-    public OrderItem(String color, String size, int quantity, Long productId, double price, OrderEntity order, String name, Long id) {
+    public OrderItem(String color, Long id, OrderEntity order, double price, Long productId, int quantity, String productName, String size, String variant) {
         this.color = color;
-        this.size = size;
-        this.quantity = quantity;
-        this.productId = productId;
-        this.price = price;
-        this.order = order;
-        this.name = name;
         this.id = id;
+        this.order = order;
+        this.price = price;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.productName = productName;
+        this.size = size;
+        this.variant = variant;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getVariant() {
+        return variant;
+    }
+
+    public void setVariant(String variant) {
+        this.variant = variant;
     }
 
     public OrderItem() {
@@ -47,14 +65,6 @@ public class OrderItem {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public double getPrice() {

@@ -12,16 +12,46 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long productId;
+    private String productName;
     private String variant;
     private int quantity;
     private double price;
+    private String size;
+    private String color;
 
-    public CartItem(Long id, double price, Long productId, int quantity, String variant) {
+    public CartItem(String color, String size, String variant, Long id, double price, Long productId, int quantity, String productName) {
+        this.color = color;
+        this.size = size;
+        this.variant = variant;
         this.id = id;
         this.price = price;
         this.productId = productId;
         this.quantity = quantity;
-        this.variant = variant;
+        this.productName = productName;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     public CartItem() {

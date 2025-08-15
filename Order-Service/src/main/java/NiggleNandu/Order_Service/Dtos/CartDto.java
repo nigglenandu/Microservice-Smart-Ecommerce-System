@@ -1,11 +1,15 @@
 package NiggleNandu.Order_Service.Dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class CartDto {
     private String userId;
-    private List<CartItemDto> items;
+
+    @JsonProperty("cartItemList")
+    private List<CartItemDto> cartItemList;
     private Double total;
     private Double discount;
     private LocalDateTime lastUpdated;
@@ -18,12 +22,12 @@ public class CartDto {
         this.discount = discount;
     }
 
-    public List<CartItemDto> getItems() {
-        return items;
+    public List<CartItemDto> getCartItemList() {
+        return cartItemList;
     }
 
-    public void setItems(List<CartItemDto> items) {
-        this.items = items;
+    public void setCartItemList(List<CartItemDto> cartItemList) {
+        this.cartItemList = cartItemList;
     }
 
     public LocalDateTime getLastUpdated() {
@@ -49,4 +53,5 @@ public class CartDto {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
 }

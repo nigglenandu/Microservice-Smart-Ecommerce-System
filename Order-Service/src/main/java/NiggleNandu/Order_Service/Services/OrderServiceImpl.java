@@ -2,6 +2,7 @@ package NiggleNandu.Order_Service.Services;
 
 import NiggleNandu.Order_Service.Clients.CartClient;
 import NiggleNandu.Order_Service.Dtos.CartDto;
+import NiggleNandu.Order_Service.Dtos.CartItemDto;
 import NiggleNandu.Order_Service.Dtos.OrderDto;
 import NiggleNandu.Order_Service.Dtos.OrderItemDto;
 import NiggleNandu.Order_Service.Entity.OrderEntity;
@@ -17,7 +18,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
+
     @Autowired
     private OrderRepo orderRepo;
 
@@ -28,7 +30,8 @@ public class OrderServiceImpl implements OrderService{
     public OrderDto placeOrder(String userId) {
         CartDto cart = cartClient.getCart(userId);
 
-        if(cart.getItems().isEmpty()){
+        List<CartItemDto> cartItems = cart.getCartItemList();
+        if (cartItems == null || cartItems.isEmpty()) {
             throw new RuntimeException("Cart is empty");
         }
 
@@ -38,33 +41,36 @@ public class OrderServiceImpl implements OrderService{
         order.setStatus(OrderStatus.PLACED);
         order.setPaymentStatus(PaymentStatus.PENDING);
         order.setTotal(cart.getTotal());
+        order.setDiscount(cart.getDiscount() != null ? cart.getDiscount() : 0.0);
 
-        List<OrderItem> items = cart.getItems().stream().map(item -> {
+        List<OrderItem> orderItems = cartItems.stream().map(item -> {
             OrderItem oi = new OrderItem();
             oi.setProductId(item.getProductId());
+            oi.setProductName(item.getProductName());
+            oi.setVariant(item.getVariant());
             oi.setQuantity(item.getQuantity());
             oi.setSize(item.getSize());
             oi.setColor(item.getColor());
             oi.setPrice(item.getPrice());
+            oi.setOrder(order);
             return oi;
         }).collect(Collectors.toList());
 
-        order.setItem(items);
+        order.setItem(orderItems);
 
-        OrderEntity saved = orderRepo.save(order);
+        OrderEntity savedOrder = orderRepo.save(order);
 
-        return mapToDto(saved);
+        return mapToDto(savedOrder);
     }
 
     @Override
     public List<OrderDto> getOrdersByUser(String userId) {
-        return orderRepo.findByUserId(userId)
-                .stream()
+        return orderRepo.findByUserId(userId).stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 
-    private OrderDto mapToDto(OrderEntity order){
+    private OrderDto mapToDto(OrderEntity order) {
         OrderDto dto = new OrderDto();
         dto.setId(order.getId());
         dto.setUserId(order.getUserId());
