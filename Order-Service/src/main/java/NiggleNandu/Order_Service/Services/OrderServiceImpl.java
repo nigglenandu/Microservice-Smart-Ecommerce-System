@@ -35,27 +35,11 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("Cart is empty");
         }
 
-        OrderEntity order = new OrderEntity();
-        order.setUserId(userId);
-        order.setOrderDate(LocalDateTime.now());
-        order.setStatus(OrderStatus.PLACED);
-        order.setPaymentStatus(PaymentStatus.PENDING);
-        order.setTotal(cart.getTotal());
-        order.setDiscount(cart.getDiscount() != null ? cart.getDiscount() : 0.0);
+        OrderEntity order = createOrderEntity(userId, cart);
 
-        List<OrderItem> orderItems = cartItems.stream().map(item -> {
-            OrderItem oi = new OrderItem();
-            oi.setProductId(item.getProductId());
-            oi.setProductName(item.getProductName());
-            oi.setVariant(item.getVariant());
-            oi.setQuantity(item.getQuantity());
-            oi.setSize(item.getSize());
-            oi.setColor(item.getColor());
-            oi.setPrice(item.getPrice());
-            oi.setOrder(order);
-            return oi;
-        }).collect(Collectors.toList());
-
+        List<OrderItem> orderItems = cartItems.stream()
+                .map(item -> mapToOrderItem(item, order))
+                .collect(Collectors.toList());
         order.setItem(orderItems);
 
         OrderEntity savedOrder = orderRepo.save(order);
@@ -70,6 +54,30 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
+    private OrderEntity createOrderEntity(String userId, CartDto cart) {
+        OrderEntity order = new OrderEntity();
+        order.setUserId(userId);
+        order.setOrderDate(LocalDateTime.now());
+        order.setStatus(OrderStatus.PLACED);
+        order.setPaymentStatus(PaymentStatus.PENDING);
+        order.setTotal(cart.getTotal());
+        order.setDiscount(cart.getDiscount() != null ? cart.getDiscount() : 0.0);
+        return order;
+    }
+
+    private OrderItem mapToOrderItem(CartItemDto cartItem, OrderEntity order) {
+        OrderItem oi = new OrderItem();
+        oi.setProductId(cartItem.getProductId());
+        oi.setProductName(cartItem.getProductName());
+        oi.setVariant(cartItem.getVariant());
+        oi.setQuantity(cartItem.getQuantity());
+        oi.setSize(cartItem.getSize());
+        oi.setColor(cartItem.getColor());
+        oi.setPrice(cartItem.getPrice());
+        oi.setOrder(order);
+        return oi;
+    }
+
     private OrderDto mapToDto(OrderEntity order) {
         OrderDto dto = new OrderDto();
         dto.setId(order.getId());
@@ -78,17 +86,24 @@ public class OrderServiceImpl implements OrderService {
         dto.setStatus(order.getStatus());
         dto.setPaymentStatus(order.getPaymentStatus().toString());
 
-        List<OrderItemDto> itemDtos = order.getItem().stream().map(item -> {
-            OrderItemDto i = new OrderItemDto();
-            i.setProductId(item.getProductId());
-            i.setQuantity(item.getQuantity());
-            i.setSize(item.getSize());
-            i.setColor(item.getColor());
-            i.setPrice(item.getPrice());
-            return i;
-        }).collect(Collectors.toList());
-
+        List<OrderItemDto> itemDtos = order.getItem().stream()
+                .map(this::mapToOrderItemDto)
+                .collect(Collectors.toList());
         dto.setItems(itemDtos);
+
+        return dto;
+    }
+
+    private OrderItemDto mapToOrderItemDto(OrderItem item) {
+        OrderItemDto dto = new OrderItemDto();
+        dto.setId(item.getId());
+        dto.setProductId(item.getProductId());
+        dto.setProductName(item.getProductName());
+        dto.setVariant(item.getVariant());
+        dto.setQuantity(item.getQuantity());
+        dto.setSize(item.getSize());
+        dto.setColor(item.getColor());
+        dto.setPrice(item.getPrice());
         return dto;
     }
 }

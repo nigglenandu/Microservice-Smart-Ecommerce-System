@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Order-Service" />
+        <module name="Jwt-Security" />
         <module name="Cart-Service" />
         <module name="Payment-Service" />
         <module name="Product-Service" />
@@ -21,6 +22,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Cart-Service" options="-parameters" />
+      <module name="Jwt-Security" options="-parameters" />
       <module name="Order-Service" options="-parameters" />
       <module name="Payment-Service" options="-parameters" />
       <module name="Product-Service" options="-parameters" />

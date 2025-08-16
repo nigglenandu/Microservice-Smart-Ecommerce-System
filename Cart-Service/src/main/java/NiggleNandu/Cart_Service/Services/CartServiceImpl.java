@@ -74,6 +74,7 @@ public class CartServiceImpl implements ICartService {
             CartItemDto dto = new CartItemDto();
             dto.setId(item.getId());
             dto.setProductId(item.getProductId());
+            dto.setProductName(item.getProductName());
             dto.setVariant(item.getVariant());
             dto.setQuantity(item.getQuantity());
             dto.setPrice(item.getPrice());
@@ -112,6 +113,7 @@ public class CartServiceImpl implements ICartService {
             CartItemDto itemDto = new CartItemDto();
             itemDto.setId(item.getId());
             itemDto.setProductId(item.getProductId());
+            itemDto.setProductName(item.getProductName());
             itemDto.setVariant(item.getVariant());
             itemDto.setQuantity(item.getQuantity());
             itemDto.setPrice(item.getPrice());

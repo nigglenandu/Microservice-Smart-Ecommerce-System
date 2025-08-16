@@ -10,5 +10,6 @@ import java.util.List;
 @FeignClient(name = "order-service", url = "http://localhost:8082")
 public interface OrderClient {
     @GetMapping("/api/orders/user/{userId}")
-    List<OrderDto> getUserOrders(@PathVariable String userId);
+    List<OrderDto> getUserOrders(@PathVariable("userId") String userId);
+
 }
