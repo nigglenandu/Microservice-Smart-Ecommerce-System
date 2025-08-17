@@ -12,6 +12,7 @@
         <module name="Payment-Service" />
         <module name="Product-Service" />
         <module name="Recommendation-Service" />
+        <module name="gateway" />
         <module name="User-Service" />
       </profile>
     </annotationProcessing>
@@ -28,6 +29,7 @@
       <module name="Product-Service" options="-parameters" />
       <module name="Recommendation-Service" options="-parameters" />
       <module name="User-Service" options="-parameters" />
+      <module name="gateway" options="-parameters" />
       <module name="simpleEcommerceApplication" options="-parameters" />
     </option>
   </component>
