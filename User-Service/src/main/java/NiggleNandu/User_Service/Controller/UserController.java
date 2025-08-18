@@ -3,7 +3,7 @@ package NiggleNandu.User_Service.Controller;
 import NiggleNandu.User_Service.Clients.OrderClient;
 import NiggleNandu.User_Service.Dto.OrderDto;
 import NiggleNandu.User_Service.Entity.RecentlyViewedProduct;
-import NiggleNandu.User_Service.Entity.UserEntity;
+import NiggleNandu.User_Service.Entity.AppUserEntity;
 import NiggleNandu.User_Service.Entity.WishlistItem;
 import NiggleNandu.User_Service.Services.IUserService;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +24,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserEntity> getUserById(@PathVariable Long id){
+    public ResponseEntity<AppUserEntity> getUserById(@PathVariable Long id){
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/create")
-    public ResponseEntity<UserEntity> createUser(@RequestBody UserEntity user) {
+    public ResponseEntity<AppUserEntity> createUser(@RequestBody AppUserEntity user) {
         return ResponseEntity.ok(userService.createUser(user));
     }
 

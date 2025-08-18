@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class UserEntity {
+public class AuthUserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
@@ -37,10 +37,10 @@ public class UserEntity {
     @UpdateTimestamp
     private LocalDateTime updateAt = LocalDateTime.now();
 
-    public UserEntity() {
+    public AuthUserEntity() {
     }
 
-    public UserEntity(LocalDateTime createAt, String email, String password, Set<RoleEntity> roles, LocalDateTime updateAt, long userId, String username) {
+    public AuthUserEntity(LocalDateTime createAt, String email, String password, Set<RoleEntity> roles, LocalDateTime updateAt, long userId, String username) {
         this.createAt = createAt;
         this.email = email;
         this.password = password;

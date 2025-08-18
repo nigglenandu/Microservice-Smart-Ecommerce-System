@@ -3,17 +3,18 @@ package Niggle.Nandu.Jwt.Security.JwtSecurity.model;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import jakarta.persistence.*;
 
+import java.util.List;
 @Entity
-@Table(name = "roles")  // table name changed to avoid reserved keyword conflicts
+@Table(name = "roles")
 public class RoleEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING) // store as a string instead of an integer
+    @Enumerated(EnumType.STRING)
     @Column(unique = true, nullable = false)
-    private Role role;
+    private Role role; // This is your enum: ROLE_USER, ROLE_ADMIN, etc.
 
     public Long getId() {
         return id;

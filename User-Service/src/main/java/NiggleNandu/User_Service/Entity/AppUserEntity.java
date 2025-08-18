@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-public class UserEntity {
+public class AppUserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class UserEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<RecentlyViewedProduct> recentlyViewed = new ArrayList<>();
 
-    public UserEntity(List<Address> addresses, String email, Long id, List<RecentlyViewedProduct> recentlyViewed, Set<String> role, String username, List<WishlistItem> wishlist) {
+    public AppUserEntity(List<Address> addresses, String email, Long id, List<RecentlyViewedProduct> recentlyViewed, Set<String> role, String username, List<WishlistItem> wishlist) {
         this.addresses = addresses;
         this.email = email;
         this.id = id;
@@ -37,7 +37,7 @@ public class UserEntity {
         this.wishlist = wishlist;
     }
 
-    public UserEntity() {
+    public AppUserEntity() {
     }
 
     public List<Address> getAddresses() {   

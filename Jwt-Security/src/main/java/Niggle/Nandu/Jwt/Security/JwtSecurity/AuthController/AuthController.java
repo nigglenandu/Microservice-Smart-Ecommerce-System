@@ -2,7 +2,7 @@ package Niggle.Nandu.Jwt.Security.JwtSecurity.AuthController;
 
 import Niggle.Nandu.Jwt.Security.JwtSecurity.model.Role;
 import Niggle.Nandu.Jwt.Security.JwtSecurity.model.RoleEntity;
-import Niggle.Nandu.Jwt.Security.JwtSecurity.model.UserEntity;
+import Niggle.Nandu.Jwt.Security.JwtSecurity.model.AuthUserEntity;
 import Niggle.Nandu.Jwt.Security.JwtSecurity.payload.JwtResponse;
 import Niggle.Nandu.Jwt.Security.JwtSecurity.payload.LoginRequest;
 import Niggle.Nandu.Jwt.Security.JwtSecurity.payload.SignupRequest;
@@ -54,12 +54,12 @@ public class AuthController {
         String jwt = jwtUtils.generateTokenFromUsername(userDetails);
         System.out.println(jwt);
 
-        Optional<UserEntity> userEntityOptional = userRepository.findByUsername(userDetails.getUsername());
+        Optional<AuthUserEntity> userEntityOptional = userRepository.findByUsername(userDetails.getUsername());
         if (userEntityOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("Error: User not found!");
         }
 
-        UserEntity user = userEntityOptional.get();
+        AuthUserEntity user = userEntityOptional.get();
 
         List<String> roles = user.getRoles().stream()
                 .map(role -> role.getRole().name())
@@ -75,7 +75,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Error: Username is already taken!");
         }
 
-        UserEntity user = new UserEntity();
+        AuthUserEntity user = new AuthUserEntity();
         user.setUsername(signupRequest.getUsername());
         user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         user.setEmail(signupRequest.getEmail());

@@ -1,7 +1,7 @@
 package NiggleNandu.User_Service.Services;
 
 import NiggleNandu.User_Service.Entity.RecentlyViewedProduct;
-import NiggleNandu.User_Service.Entity.UserEntity;
+import NiggleNandu.User_Service.Entity.AppUserEntity;
 import NiggleNandu.User_Service.Entity.WishlistItem;
 import NiggleNandu.User_Service.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +17,18 @@ public class UserServiceImpl implements IUserService{
     private UserRepository userRepo;
 
     @Override
-    public Optional<UserEntity> getUserById(Long id) {
+    public Optional<AppUserEntity> getUserById(Long id) {
         return userRepo.findById(id);
     }
 
     @Override
-    public UserEntity createUser(UserEntity user) {
+    public AppUserEntity createUser(AppUserEntity user) {
         return userRepo.save(user);
     }
 
     @Override
     public void addToWishlist(Long id, WishlistItem item) {
-        UserEntity user = getUserById(id)
+        AppUserEntity user = getUserById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
         user.getWishlist().add(item);
         userRepo.save(user);
@@ -36,7 +36,7 @@ public class UserServiceImpl implements IUserService{
 
     @Override
     public void addViewedProduct(Long id, RecentlyViewedProduct product) {
-        UserEntity user = getUserById(id)
+        AppUserEntity user = getUserById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
         product.setViewedAt(LocalDateTime.now());
         user.getRecentlyViewed().add(product);
