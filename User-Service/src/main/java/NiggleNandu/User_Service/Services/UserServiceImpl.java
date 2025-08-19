@@ -1,5 +1,7 @@
 package NiggleNandu.User_Service.Services;
 
+import NiggleNandu.User_Service.Clients.SecurityClient;
+import NiggleNandu.User_Service.Dto.SignupRequestDto;
 import NiggleNandu.User_Service.Entity.RecentlyViewedProduct;
 import NiggleNandu.User_Service.Entity.AppUserEntity;
 import NiggleNandu.User_Service.Entity.WishlistItem;
@@ -16,13 +18,16 @@ public class UserServiceImpl implements IUserService{
     @Autowired
     private UserRepository userRepo;
 
+    @Autowired
+    private SecurityClient securityClient;
+
     @Override
     public Optional<AppUserEntity> getUserById(Long id) {
         return userRepo.findById(id);
     }
 
     @Override
-    public AppUserEntity createUser(AppUserEntity user) {
+    public AppUserEntity createUser(AppUserEntity user){
         return userRepo.save(user);
     }
 

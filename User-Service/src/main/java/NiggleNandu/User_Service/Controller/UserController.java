@@ -1,11 +1,14 @@
 package NiggleNandu.User_Service.Controller;
 
 import NiggleNandu.User_Service.Clients.OrderClient;
+import NiggleNandu.User_Service.Clients.SecurityClient;
 import NiggleNandu.User_Service.Dto.OrderDto;
+import NiggleNandu.User_Service.Dto.SignupRequestDto;
 import NiggleNandu.User_Service.Entity.RecentlyViewedProduct;
 import NiggleNandu.User_Service.Entity.AppUserEntity;
 import NiggleNandu.User_Service.Entity.WishlistItem;
 import NiggleNandu.User_Service.Services.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +20,12 @@ public class UserController {
 
     private final IUserService userService;
     private final OrderClient orderClient;
+    private final SecurityClient securityClient;
 
-    public UserController(IUserService userService, OrderClient orderClient) {
-        this.userService = userService;
+    public UserController(OrderClient orderClient, IUserService userService, SecurityClient securityClient) {
         this.orderClient = orderClient;
+        this.userService = userService;
+        this.securityClient = securityClient;
     }
 
     @GetMapping("/{id}")
@@ -30,9 +35,15 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<AppUserEntity> createUser(@RequestBody AppUserEntity user) {
-        return ResponseEntity.ok(userService.createUser(user));
+    @PostMapping("/register")
+    public ResponseEntity<AppUserEntity> registerUser(@RequestBody SignupRequestDto signupRequest) {
+        securityClient.registerUser(signupRequest);
+        AppUserEntity user = new AppUserEntity();
+        user.setUsername(signupRequest.getUsername());
+        user.setEmail(signupRequest.getEmail());
+        AppUserEntity createdUser = userService.createUser(user);
+
+        return ResponseEntity.ok(createdUser);
     }
 
 
