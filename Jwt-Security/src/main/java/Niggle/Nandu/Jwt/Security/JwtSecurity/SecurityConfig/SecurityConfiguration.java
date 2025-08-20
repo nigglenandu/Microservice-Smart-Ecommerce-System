@@ -39,6 +39,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+//                        Optionally allow vendor/delivery/support paths
+//                        .requestMatchers("/api/vendor/**").hasRole("VENDOR")
+//                        .requestMatchers("/api/delivery/**").hasRole("DELIVERY")
+//                        .requestMatchers("/api/support/**").hasRole("SUPPORT")
                         .anyRequest().authenticated()
                 )
 

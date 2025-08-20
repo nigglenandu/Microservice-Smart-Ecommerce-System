@@ -4,6 +4,7 @@ import NiggleNandu.Order_Service.Dtos.OrderDto;
 import NiggleNandu.Order_Service.Services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,11 +17,13 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/{userId}")
+    @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
     public ResponseEntity<OrderDto> place(@PathVariable String userId) {
         return ResponseEntity.ok(orderService.placeOrder(userId));
     }
 
     @GetMapping("/user/{userId}")
+    @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
     public ResponseEntity<List<OrderDto>> getByUser(@PathVariable String userId) {
         return ResponseEntity.ok(orderService.getOrdersByUser(userId));
     }

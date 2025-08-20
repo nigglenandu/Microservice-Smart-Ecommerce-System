@@ -4,6 +4,7 @@ import NiggleNandu.Recommendation_Service.Dtos.RecommendationDto;
 import NiggleNandu.Recommendation_Service.Service.RecommendationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ public class RecommendationController {
 
 
     @GetMapping("/user/{userId}")
+    @PreAuthorize("#userId == authentication.principal.id")
     public ResponseEntity<List<RecommendationDto>> userRecommendations(@PathVariable String userId){
         return ResponseEntity.ok(recommendationService.getUserRecommendations(userId));
     }

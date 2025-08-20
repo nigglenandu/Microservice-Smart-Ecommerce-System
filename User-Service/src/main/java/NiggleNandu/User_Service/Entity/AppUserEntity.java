@@ -16,7 +16,8 @@ public class AppUserEntity {
     private String email;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<String> role;
+    @Enumerated(EnumType.STRING)
+    private Set<RoleStatus> roles;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Address> addresses = new ArrayList<>();
@@ -27,12 +28,12 @@ public class AppUserEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<RecentlyViewedProduct> recentlyViewed = new ArrayList<>();
 
-    public AppUserEntity(List<Address> addresses, String email, Long id, List<RecentlyViewedProduct> recentlyViewed, Set<String> role, String username, List<WishlistItem> wishlist) {
+    public AppUserEntity(List<Address> addresses, String email, Long id, List<RecentlyViewedProduct> recentlyViewed, Set<RoleStatus> roles, String username, List<WishlistItem> wishlist) {
         this.addresses = addresses;
         this.email = email;
         this.id = id;
         this.recentlyViewed = recentlyViewed;
-        this.role = role;
+        this.roles = roles;
         this.username = username;
         this.wishlist = wishlist;
     }
@@ -72,12 +73,12 @@ public class AppUserEntity {
         this.recentlyViewed = recentlyViewed;
     }
 
-    public Set<String> getRole() {
-        return role;
+    public Set<RoleStatus> getRoles() {
+        return roles;
     }
 
-    public void setRole(Set<String> role) {
-        this.role = role;
+    public void setRoles(Set<RoleStatus> roles) {
+        this.roles = roles;
     }
 
     public String getUsername() {

@@ -10,6 +10,7 @@ import NiggleNandu.User_Service.Entity.WishlistItem;
 import NiggleNandu.User_Service.Services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     public ResponseEntity<AppUserEntity> getUserById(@PathVariable Long id){
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
@@ -48,18 +50,20 @@ public class UserController {
 
 
     @GetMapping("{id}/orders")
-//    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     public ResponseEntity<List<OrderDto>> getOrderHistory(@PathVariable Long id){
         return ResponseEntity.ok(orderClient.getUsersOrders(id));
     }
 
     @PostMapping("/{id}/wishlist")
+    @PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<String> addToWishlist(@PathVariable Long id, @RequestBody WishlistItem item){
         userService.addToWishlist(id, item);
         return ResponseEntity.ok("Added to wishlist");
     }
 
     @PostMapping("/{id}/viewed")
+    @PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<String> addViewed(@PathVariable Long id, @RequestBody RecentlyViewedProduct item){
         userService.addViewedProduct(id, item);
         return ResponseEntity.ok("Added to recently viewed");

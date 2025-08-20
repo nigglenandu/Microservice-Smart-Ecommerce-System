@@ -31,7 +31,7 @@ public class EsewaController {
 
     @PostMapping("/initiate")
     public ResponseEntity<PaymentFormFieldResponse> initiatePayment(@RequestBody PaymentRequest request){
-        logger.info("Initiating payment: amount={}, productCode={}", request.getAmount(), request.getProductCode());
+        logger.info(" payment: amount={}, produInitiatingctCode={}", request.getAmount(), request.getProductCode());
         return ResponseEntity.ok(paymentService.initiatePayment(request));
     }
 

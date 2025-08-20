@@ -28,10 +28,12 @@ public class GatewaySecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
+                .csrf(csrf -> csrf.disable())
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers("/api/**").permitAll() // Let JWT filter handle authorization
-                        .anyExchange().authenticated()
+                        .pathMatchers("/api/auth/**").permitAll()
+                        .pathMatchers("/api/users/register").permitAll()
+                        // Admin-wide endpoints
+                        .pathMatchers("/api/admin/**").hasRole("ADMIN")
                 );
 
         return http.build();

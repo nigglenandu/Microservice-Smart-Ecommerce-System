@@ -1,6 +1,6 @@
-package Niggle.Nandu.Jwt.Security.JwtSecurity.model;
+package NiggleNandu.User_Service.Entity;
 
-public enum Role {
+public enum RoleStatus {
     ROLE_USER,
     ROLE_ADMIN,
     ROLE_VENDOR,
