@@ -62,10 +62,8 @@ public class AuthController {
         AuthUserEntity user = userEntityOptional.get();
 
         List<String> roles = user.getRoles().stream()
-                .flatMap(roleEntity -> roleEntity.getRoles().stream())
-                .map(Role::name)
+                .map(roleEntity -> roleEntity.getRole().name())
                 .collect(Collectors.toList());
-
 
         return ResponseEntity.ok(new JwtResponse(jwt, roles, user.getUserId(), user.getUsername(), user.getEmail()));
 
