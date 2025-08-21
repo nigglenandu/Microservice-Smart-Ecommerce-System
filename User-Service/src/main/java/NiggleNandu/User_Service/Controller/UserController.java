@@ -4,6 +4,7 @@ import NiggleNandu.User_Service.Clients.OrderClient;
 import NiggleNandu.User_Service.Clients.SecurityClient;
 import NiggleNandu.User_Service.Dto.OrderDto;
 import NiggleNandu.User_Service.Dto.SignupRequestDto;
+import NiggleNandu.User_Service.Entity.Address;
 import NiggleNandu.User_Service.Entity.RecentlyViewedProduct;
 import NiggleNandu.User_Service.Entity.AppUserEntity;
 import NiggleNandu.User_Service.Entity.WishlistItem;
@@ -14,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -43,6 +45,20 @@ public class UserController {
         AppUserEntity user = new AppUserEntity();
         user.setUsername(signupRequest.getUsername());
         user.setEmail(signupRequest.getEmail());
+
+        List<Address> addressEntities = signupRequest.getAddresses().stream()
+                .map(dto -> new Address(
+                        dto.getCity(),
+                        dto.getCountry(),
+                        null,
+                        dto.getPostalCode(),
+                        dto.getState(),
+                        dto.getStreet()
+                ))
+                .collect(Collectors.toList());
+
+        user.setAddresses(addressEntities);
+
         AppUserEntity createdUser = userService.createUser(user);
 
         return ResponseEntity.ok(createdUser);

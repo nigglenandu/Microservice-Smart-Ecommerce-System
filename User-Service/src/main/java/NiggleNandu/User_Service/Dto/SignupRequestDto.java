@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
 import java.util.Set;
 
 public class SignupRequestDto {
@@ -20,6 +21,16 @@ public class SignupRequestDto {
     private String password;
 
     private Set<String> roles;
+
+    private List<AddressDto> addresses;
+
+    public List<AddressDto> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<AddressDto> addresses) {
+        this.addresses = addresses;
+    }
 
     public @NotNull(message = "Email is required") @Email(message = "Invalid email format") String getEmail() {
         return email;
