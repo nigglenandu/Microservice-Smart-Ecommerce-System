@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="service-reg" />
         <module name="Order-Service" />
         <module name="Jwt-Security" />
         <module name="Cart-Service" />
@@ -30,6 +31,7 @@
       <module name="Recommendation-Service" options="-parameters" />
       <module name="User-Service" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="service-reg" options="-parameters" />
       <module name="simpleEcommerceApplication" options="-parameters" />
     </option>
   </component>

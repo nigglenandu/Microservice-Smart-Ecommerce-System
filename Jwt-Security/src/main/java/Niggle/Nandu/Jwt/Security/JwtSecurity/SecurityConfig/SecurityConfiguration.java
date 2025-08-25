@@ -38,6 +38,7 @@ public class SecurityConfiguration {
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/api/users/register").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
 //                        Optionally allow vendor/delivery/support paths

@@ -4,6 +4,7 @@ import NiggleNandu.User_Service.Clients.OrderClient;
 import NiggleNandu.User_Service.Clients.SecurityClient;
 import NiggleNandu.User_Service.Dto.OrderDto;
 import NiggleNandu.User_Service.Dto.SignupRequestDto;
+import NiggleNandu.User_Service.Dto.SignupRequestForSecurity;
 import NiggleNandu.User_Service.Entity.Address;
 import NiggleNandu.User_Service.Entity.RecentlyViewedProduct;
 import NiggleNandu.User_Service.Entity.AppUserEntity;
@@ -41,7 +42,17 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<AppUserEntity> registerUser(@RequestBody SignupRequestDto signupRequest) {
-        securityClient.registerUser(signupRequest);
+
+        SignupRequestForSecurity securitySignup = new SignupRequestForSecurity();
+        securitySignup.setUsername(signupRequest.getUsername());
+        securitySignup.setEmail(signupRequest.getEmail());
+        securitySignup.setPassword(signupRequest.getPassword());
+        securitySignup.setRoles(signupRequest.getRoles());
+
+        securityClient.registerUser(securitySignup);
+
+
+
         AppUserEntity user = new AppUserEntity();
         user.setUsername(signupRequest.getUsername());
         user.setEmail(signupRequest.getEmail());

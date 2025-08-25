@@ -13,6 +13,7 @@
         <option value="$PROJECT_DIR$/User-Service/pom.xml" />
         <option value="$PROJECT_DIR$/Jwt-Security/pom.xml" />
         <option value="$PROJECT_DIR$/gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/service-reg/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

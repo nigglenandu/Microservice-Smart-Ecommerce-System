@@ -31,6 +31,12 @@ public class AuthenticationFilter implements WebFilter {
         String token = jwtUtils.getJwtFromHeader(exchange.getRequest());
         String path = exchange.getRequest().getPath().value();
 
+        // ✅ Skip JWT check for public endpoints
+        if (path.startsWith("/api/auth") || path.equals("/api/users/register")) {
+            return chain.filter(exchange);
+        }
+
+
         System.out.println("🔐 Incoming request to: " + path);
         System.out.println("🔐 Token: " + token);
 
