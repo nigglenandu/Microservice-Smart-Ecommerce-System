@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -40,10 +41,9 @@ public class JwtUtils {
             String username = userDetails.getUsername();
             System.out.println("Generating token for username: " + username);
 
-            String roles = userDetails.getAuthorities().stream()
+            var roles = userDetails.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.joining(","));
-
+                    .toList();
 
             String token = Jwts.builder()
                     .setSubject(username)
@@ -52,6 +52,7 @@ public class JwtUtils {
                     .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                     .signWith(key())
                     .compact();
+
             System.out.println("Generated Token: " + token);
             return token;
         } catch (Exception e) {
@@ -60,6 +61,7 @@ public class JwtUtils {
             return null;
         }
     }
+
 
 
     public String getUserNameFromJwtToken(String token) {
@@ -71,13 +73,14 @@ public class JwtUtils {
                 .getSubject();
 
     }
-    public String getRolesFromJwtToken(String token) {
+
+    public List<String> getRolesFromJwtToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key())
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
-                .get("roles", String.class);
+                .get("roles", List.class);
     }
 
 

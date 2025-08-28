@@ -5,10 +5,7 @@ import NiggleNandu.User_Service.Clients.SecurityClient;
 import NiggleNandu.User_Service.Dto.OrderDto;
 import NiggleNandu.User_Service.Dto.SignupRequestDto;
 import NiggleNandu.User_Service.Dto.SignupRequestForSecurity;
-import NiggleNandu.User_Service.Entity.Address;
-import NiggleNandu.User_Service.Entity.RecentlyViewedProduct;
-import NiggleNandu.User_Service.Entity.AppUserEntity;
-import NiggleNandu.User_Service.Entity.WishlistItem;
+import NiggleNandu.User_Service.Entity.*;
 import NiggleNandu.User_Service.Services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -39,10 +37,8 @@ public class UserController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
     @PostMapping("/register")
     public ResponseEntity<AppUserEntity> registerUser(@RequestBody SignupRequestDto signupRequest) {
-
         SignupRequestForSecurity securitySignup = new SignupRequestForSecurity();
         securitySignup.setUsername(signupRequest.getUsername());
         securitySignup.setEmail(signupRequest.getEmail());
@@ -51,11 +47,19 @@ public class UserController {
 
         securityClient.registerUser(securitySignup);
 
-
-
         AppUserEntity user = new AppUserEntity();
         user.setUsername(signupRequest.getUsername());
         user.setEmail(signupRequest.getEmail());
+
+        Set<RoleStatus> roleEnums = signupRequest.getRoles().stream()
+                .map(RoleStatus::valueOf)
+                .collect(Collectors.toSet());
+
+        if (roleEnums.isEmpty()) {
+            roleEnums.add(RoleStatus.ROLE_USER);
+        }
+
+        user.setRoles(roleEnums);
 
         List<Address> addressEntities = signupRequest.getAddresses().stream()
                 .map(dto -> new Address(

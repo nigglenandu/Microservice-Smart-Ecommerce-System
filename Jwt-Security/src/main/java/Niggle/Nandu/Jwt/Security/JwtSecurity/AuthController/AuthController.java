@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -80,15 +81,19 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         user.setEmail(signupRequest.getEmail());
 
-        Optional<RoleEntity> userRole = roleRepository.findByRole(Role.ROLE_USER);
-        RoleEntity role = roleRepository.findByRole(Role.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Error: Default role not found!"));
-        user.setRoles(Collections.singleton(role));
+        // Fetch roles from signupRequest and convert to Set
+        Set<RoleEntity> roles = signupRequest.getRoles().stream()
+                .map(roleName -> roleRepository.findByRole(Role.valueOf(roleName))
+                        .orElseThrow(() -> new RuntimeException("Error: Role " + roleName + " not found!"))
+                )
+                .collect(Collectors.toSet());
 
+        user.setRoles(roles);
 
         userRepository.save(user);
         return ResponseEntity.ok("User registered successfully!");
     }
+
 
     @PostMapping("logout")
     public ResponseEntity<?> logoutUser() {
