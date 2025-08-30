@@ -21,13 +21,13 @@ public class ProductController {
     }
 
 
-    @PostMapping
+    @PostMapping("create")
     @PreAuthorize("hasRole('ADMIN') or hasRole('VENDOR')")
     public ResponseEntity<ProductDto> create(@RequestBody ProductDto dto) {
         return ResponseEntity.ok(productService.createProduct(dto));
     }
 
-    @GetMapping
+    @GetMapping("list")
     @PreAuthorize("hasRole('ADMIN') or hasRole('VENDOR')")
     public ResponseEntity<List<ProductDto>> getAllProducts() {
         return ResponseEntity.ok(productService.getAll());
