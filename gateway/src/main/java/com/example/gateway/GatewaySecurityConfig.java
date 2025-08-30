@@ -34,6 +34,10 @@ public class GatewaySecurityConfig {
                         .pathMatchers("/api/users/register").permitAll()
                         // Admin-wide endpoints
                         .pathMatchers("/api/admin/**").hasRole("ADMIN")
+                        .pathMatchers("/api/vendor/**").hasRole("VENDOR")
+                        .pathMatchers("/api/delivery/**").hasRole("DELIVERY")
+                        .pathMatchers("/api/support/**").hasRole("SUPPORT")
+                        .anyExchange().permitAll()
                 );
 
         return http.build();

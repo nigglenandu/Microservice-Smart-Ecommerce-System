@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient(name = "order-service", url = "http://localhost:8082", fallback = OrderClientFallback.class)
+@FeignClient(name = "order-service", url = "http://localhost:8088", fallback = OrderClientFallback.class)
 public interface OrderClient {
 
     @GetMapping("/api/orders/user/{userId}")

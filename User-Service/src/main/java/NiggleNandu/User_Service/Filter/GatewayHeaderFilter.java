@@ -13,7 +13,7 @@ public class GatewayHeaderFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String gatewayHeader = httpRequest.getHeader("X-Gateway-Auth");
-
+        System.out.println("GatewayHeaderFilter triggered with header: " + gatewayHeader);
         if (gatewayHeader == null || !gatewayHeader.equals("true")) {
             throw new ServletException("Unauthorized access: must go through Gateway");
         }
