@@ -11,6 +11,7 @@
         <module name="Jwt-Security" />
         <module name="Cart-Service" />
         <module name="Payment-Service" />
+        <module name="configServer" />
         <module name="Product-Service" />
         <module name="Recommendation-Service" />
         <module name="gateway" />
@@ -18,6 +19,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="configServer (1)" target="17" />
       <module name="simpleEcommerceApplication" target="17" />
     </bytecodeTargetLevel>
   </component>
@@ -30,6 +32,8 @@
       <module name="Product-Service" options="-parameters" />
       <module name="Recommendation-Service" options="-parameters" />
       <module name="User-Service" options="-parameters" />
+      <module name="configServer" options="-parameters" />
+      <module name="configServer (1)" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="service-reg" options="-parameters" />
       <module name="simpleEcommerceApplication" options="-parameters" />

@@ -14,6 +14,7 @@
         <option value="$PROJECT_DIR$/Jwt-Security/pom.xml" />
         <option value="$PROJECT_DIR$/gateway/pom.xml" />
         <option value="$PROJECT_DIR$/service-reg/pom.xml" />
+        <option value="$PROJECT_DIR$/configServer/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
