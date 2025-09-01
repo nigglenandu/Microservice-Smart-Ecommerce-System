@@ -10,6 +10,8 @@ import NiggleNandu.Order_Service.Entity.OrderItem;
 import NiggleNandu.Order_Service.Entity.OrderStatus;
 import NiggleNandu.Order_Service.Entity.PaymentStatus;
 import NiggleNandu.Order_Service.Repository.OrderRepo;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +28,26 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private CartClient cartClient;
 
+    @CircuitBreaker(name = "cartServiceBreaker", fallbackMethod = "fallbackCart")
+    @Retry(name = "cartServiceBreaker")
+    public CartDto getCartSafe(String userId) {
+        return cartClient.getCart(userId);
+    }
+
+    public CartDto fallbackCart(String userId, Throwable ex) {
+        System.out.println("Cart service is down for user " + userId + ": " + ex.getMessage());
+        CartDto cart = new CartDto();
+        cart.setUserId(userId);
+        cart.setCartItemList(List.of());
+        cart.setTotal(0.0);
+        cart.setDiscount(0.0);
+        return cart;
+    }
+
+
     @Override
     public OrderDto placeOrder(String userId) {
-        CartDto cart = cartClient.getCart(userId);
+        CartDto cart = getCartSafe(userId);
 
         List<CartItemDto> cartItems = cart.getCartItemList();
         if (cartItems == null || cartItems.isEmpty()) {
