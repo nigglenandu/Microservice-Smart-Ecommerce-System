@@ -9,6 +9,7 @@ import NiggleNandu.Order_Service.Entity.OrderEntity;
 import NiggleNandu.Order_Service.Entity.OrderItem;
 import NiggleNandu.Order_Service.Entity.OrderStatus;
 import NiggleNandu.Order_Service.Entity.PaymentStatus;
+import NiggleNandu.Order_Service.Messaging.OrderEventProducer;
 import NiggleNandu.Order_Service.Repository.OrderRepo;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -24,6 +25,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepo orderRepo;
+
+    @Autowired
+    private OrderEventProducer orderEventProducer;
 
     @Autowired
     private CartClient cartClient;
@@ -62,6 +66,10 @@ public class OrderServiceImpl implements OrderService {
         order.setItem(orderItems);
 
         OrderEntity savedOrder = orderRepo.save(order);
+
+        //rabbit
+        OrderDto savedDto = mapToDto(savedOrder);
+        orderEventProducer.sendOrderPlaced(savedDto);
 
         return mapToDto(savedOrder);
     }
